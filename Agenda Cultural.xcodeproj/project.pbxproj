@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		591BB1D62A061F2000C45D5B /* ExtensionCGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591BB1D52A061F2000C45D5B /* ExtensionCGImage.swift */; };
 		59CB881C276088CA00BBD856 /* CulturalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CB881B276088CA00BBD856 /* CulturalApp.swift */; };
 		59CB881E276088CA00BBD856 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CB881D276088CA00BBD856 /* ContentView.swift */; };
 		59CB8820276088CB00BBD856 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59CB881F276088CB00BBD856 /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		591BB1D52A061F2000C45D5B /* ExtensionCGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionCGImage.swift; sourceTree = "<group>"; };
 		59CB8818276088CA00BBD856 /* Agenda Cultural.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Agenda Cultural.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		59CB881B276088CA00BBD856 /* CulturalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CulturalApp.swift; sourceTree = "<group>"; };
 		59CB881D276088CA00BBD856 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				59CB885F2761B00600BBD856 /* ViewControllerHolder.swift */,
 				59CB88622761B03F00BBD856 /* ExtensionUIViewController.swift */,
 				59CB88722761CB8000BBD856 /* ExtensionString.swift */,
+				591BB1D52A061F2000C45D5B /* ExtensionCGImage.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				591BB1D62A061F2000C45D5B /* ExtensionCGImage.swift in Sources */,
 				59CB88732761CB8000BBD856 /* ExtensionString.swift in Sources */,
 				59CB88692761B1AD00BBD856 /* MagazineView.swift in Sources */,
 				59CB88582760904B00BBD856 /* ACLArticleDetail.swift in Sources */,
