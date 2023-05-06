@@ -44,6 +44,21 @@ struct ACLArticle: Codable {
             case .string(let value): return value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? String()
         }
     }
+    
+    static func testArticle() -> ACLArticle {
+        let result = ACLArticle(
+            id: -1,
+            type: "post",
+            title: ACLGUID(rendered: "João Canijo"),
+            subtitle: "\"Na minha vida fui sempre encontrando atrizes disponíveis para se entregarem e para me darem coisas interessantes. Muito mais do que atores.\"",
+            aclArticleDescription: [],
+            featuredMediaLarge: ACLFeaturedMedia.string("https://www.agendalx.pt/content/uploads/2023/04/HMM_8422-934x1400.jpg"),
+            contentType: "entrevista",
+            categoriesNameList: ACLCategories(literature: nil, cinema: ACLGenericObject(id: 38, slug: "cinema", name: "cinema"), music: nil, theatre: nil, arts: nil, guidedTours: nil, dance: nil, science: nil, fair: nil),
+            tagsNameList: nil,
+            link: "https://www.agendalx.pt/?post_type=post&p=90032")
+        return result
+    }
 }
 
 extension ACLArticle: Hashable {
