@@ -25,60 +25,29 @@ struct MagazineView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(viewModel.issues, id:\.self) { issueId in
-                                Text(issueId.fromDate)
-                                    .font(.headline)
-                                    .foregroundColor(issueId == viewModel.selectedIssue ? Color(uiColor: .label) : Color(uiColor: .secondaryLabel))
-                                    .underline(issueId == viewModel.selectedIssue, color: Color(uiColor: .label))
-                                    .clipShape(Rectangle())
-                                    .onTapGesture { didTapIssue(issueId) }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    .padding(.bottom)
-                    Divider()
-                        .padding(.horizontal)
-                }
                 ScrollView {
-                    VStack(spacing: 16) {
-                        ForEach(viewModel.articles[viewModel.selectedIssue] ?? [], id: \.self) { article in
-                            if article.isInterview {
-                                NavigationLink(destination: ArticleView(articleId: article.id!)) {
-                                    MagazineInterviewView(article: article)
-                                        .padding(.horizontal)
-                                }
-                                .buttonStyle(.plain)
+                    VStack {
+//                        ForEach(viewModel.interviews, id: \.self) { interview in
+//                            NavigationLink(destination: ArticleView(articleId: interview.id!)) {
+//                                MagazineInterviewView(article: interview)
+//                                    .padding(.horizontal)
+//                            }
+//                            .buttonStyle(.plain)
+//                        }
+                        ForEach(viewModel.articles, id: \.self) { article in
+                            NavigationLink(destination: ArticleView(articleId: article.id!)) {
+                                MagazineGeneralView(article: article)
+                                    .padding(.horizontal)
                             }
-                            else {
-                                NavigationLink(destination: ArticleView(articleId: article.id!)) {
-                                    MagazineGeneralView(article: article)
-                                        .padding(.horizontal)
-                                }
-                                .buttonStyle(.plain)
-                            }
+                            .buttonStyle(.plain)
+
                         }
                     }
-                    .padding(.vertical)
-                }
-                .introspectScrollView { scrollView in
-                    
-                    scrollView.delegate = scrollDelegate
-                    scrollDelegate.scrollView = scrollView
                 }
             }
             .navigationTitle("Magazine")
         }
-        .onAppear { viewModel.loadArticle() }
-    }
-    
-    func didTapIssue(_ issue: String) {
-        
-        scrollDelegate.scrollToTheTop(animated: issue == viewModel.selectedIssue)
-        viewModel.selectedIssue = issue
+        .onAppear(perform: viewModel.loadArticle)
     }
 }
 
@@ -89,9 +58,8 @@ struct MagazineView_Previews: PreviewProvider {
 }
 
 class MagazineViewModel: ObservableObject {
-    @Published var articles = [String: [ACLArticle]]()
-    @Published var issues = [String]()
-    @Published var selectedIssue = String()
+    @Published var interviews = [ACLArticle]()
+    @Published var articles = [ACLArticle]()
     
     // MARK: - Exposed Methods
     func loadArticle() {
@@ -110,53 +78,12 @@ class MagazineViewModel: ObservableObject {
     
     // MARK: - Private Methods
     private func updateArticles(with newArticles: [ACLArticle]) {
-        
-        var magazineIssues = [String: [ACLArticle]]()
-        var issues = Set<String>()
-        
-        // Sorts articles by Year/Month
-        for var article in newArticles {
-            
-            if (article.month ?? String()).count == 1 {
-                
-                article.month = "0\(article.month ?? String())"
-            }
-            let issueId = "\(article.year ?? String())\(article.month ?? String())"
-            issues.insert(issueId)
-            if var issue = magazineIssues[issueId] {
-                
-                issue.append(article)
-                issue.sort(by: { $0.month ?? String() > $1.month ?? String() })
-                magazineIssues[issueId] = issue
-            }
-            else {
-                
-                magazineIssues[issueId] = [article]
-            }
-        }
-        
-        // Creates the Recent Articles (current and previous month)
-        var listOfIssues = issues.sorted(by: { $0 > $1 })
-        var listOfRecentArticles = [ACLArticle]()
-        
-        let currentIssue = listOfIssues.removeFirst()
-        listOfRecentArticles.append(contentsOf: magazineIssues[currentIssue] ?? [])
-        magazineIssues.removeValue(forKey: currentIssue)
-        
-        let previousIssue = listOfIssues.removeFirst()
-        listOfRecentArticles.append(contentsOf: magazineIssues[previousIssue] ?? [])
-        magazineIssues.removeValue(forKey: previousIssue)
-        
-        listOfIssues.insert("Recentes", at: 0)
-        listOfRecentArticles.sort(by: { $0.month ?? String() > $1.month ?? String() })
-        magazineIssues["Recentes"] = listOfRecentArticles
-
-        // Publishes to the UI
+        var sortedAllArticles = newArticles.sorted(by: {$0.articleSortId > $1.articleSortId})
+        var sortedArticles = sortedAllArticles.filter({ !$0.isInterview })
+        var sortedInterviews = sortedAllArticles.filter({ $0.isInterview })
         DispatchQueue.main.async {
-            
-            self.issues = listOfIssues
-            self.articles = magazineIssues
-            self.selectedIssue = self.issues.first ?? String()
+            self.interviews = sortedInterviews
+            self.articles = sortedArticles
         }
     }
 }

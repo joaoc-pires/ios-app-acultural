@@ -45,6 +45,15 @@ struct ACLArticle: Codable {
         }
     }
     
+    var articleSortId: String {
+        var month = self.month
+        if (month ?? String()).count == 1 {
+        
+            month = "0\(month ?? String())"
+        }
+        return "\(year ?? String())\(month ?? String())\(String(id ?? 0))"
+    }
+    
     static func testArticle() -> ACLArticle {
         let result = ACLArticle(
             id: -1,
